@@ -7,14 +7,15 @@ RUN addgroup -S -g 666 mylar \
 
 # This is Mylar basic install with requirements
 RUN apk add --no-cache ca-certificates openssl python py-pip py-six py-cryptography \
-                       py-enum34 py-openssl py-cheetah py-pillow zlib shadow git \
- && pip --no-cache-dir install --upgrade comictagger \
-                                         configparser \
-                                         html5lib \
-                                         requests\
-                                         tzlocal \
+                       py-enum34 py-openssl py-cheetah py-pillow zlib shadow \
+ && pip --no-cache-dir install -U comictagger==1.1.32rc1 \
+                                  configparser \
+                                  html5lib \
+                                  requests\
+                                  tzlocal \
  && cd /opt \
- && git clone https://github.com/evilhero/mylar.git mylar \
+ && wget -O- https://github.com/evilhero/mylar/archive/master.tar.gz | tar -zx \
+ && mv -v mylar-master mylar \
  && mkdir -p /mnt/comics \
  && mkdir -p /mnt/downloads \
  && mkdir -p /mnt/torrents \
