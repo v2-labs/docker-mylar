@@ -12,6 +12,7 @@ echo
 echo "  User:    ${USER}"
 echo "  UID:     ${MYLAR_UID:=666}"
 echo "  GID:     ${MYLAR_GID:=666}"
+echo "  CHMOD:   ${MYLAR_CHMOD_ACTIVE:=0}"
 echo
 echo "  Config:  ${CONFIG:=/mnt/data/config.ini}"
 echo
