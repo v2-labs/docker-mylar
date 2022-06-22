@@ -25,7 +25,7 @@ RUN apk add --no-cache ca-certificates openssl python py-pip py-six py-cryptogra
 COPY entrypoint.sh /home/mylar/entrypoint.sh
 RUN chmod 755 /home/mylar/entrypoint.sh
 
-VOLUME ["/mnt/comics", "/mnt/downloads", "/mnt/torrents" "/mnt/data"]
+VOLUME ["/mnt/comics", "/mnt/downloads", "/mnt/torrents", "/mnt/data"]
 
 EXPOSE 8090
 
