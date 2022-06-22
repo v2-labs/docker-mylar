@@ -12,9 +12,11 @@ echo
 echo "  User:    ${USER}"
 echo "  UID:     ${MYLAR_UID:=666}"
 echo "  GID:     ${MYLAR_GID:=666}"
-echo "  CHMOD:   ${MYLAR_CHMOD_ACTIVE:=0}"
+echo "  CHMOD:   ${CHMOD_ACTIVE:=0}"
+echo "  DEBUG:   ${DEBUG_LOG:=--quiet}"
 echo
 echo "  Config:  ${CONFIG:=/mnt/data/config.ini}"
+echo "  DataDir: ${DATADIR:=/mnt/data}"
 echo
 
 #
@@ -29,11 +31,13 @@ echo "[DONE]"
 #
 # Set directory permissions.
 #
-
 printf "Set permissions... "
 touch ${CONFIG}
-chown -R ${USER}:${USER} \
+chown -R ${MYLAR_UID}:${MYLAR_GID} \
       /home/mylar   /opt/mylar \
+      > /dev/null 2>&1
+[[ ${CHMOD_ACTIVE} -ne 0 ]] && \
+      chown -R ${MYLAR_UID}:${MYLAR_GID} \
       /mnt/comics   /mnt/downloads \
       /mnt/torrents /mnt/data \
       > /dev/null 2>&1
@@ -55,4 +59,4 @@ echo "[${PORT}]"
 #
 
 echo "Starting Mylar..."
-exec su -p ${USER} -c "python -OO /opt/mylar/Mylar.py --quiet --nolaunch --datadir=${DATADIR} ${LISTENER} --config=${CONFIG}"
+exec su -p ${USER} -c "python -OO /opt/mylar/Mylar.py --nolaunch ${DEBUG} --datadir=${DATADIR} ${LISTENER} --config=${CONFIG}"
