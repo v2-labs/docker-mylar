@@ -16,16 +16,16 @@ RUN apk add --no-cache ca-certificates openssl python py-pip py-six py-cryptogra
  && cd /opt \
  && wget -O- https://github.com/evilhero/mylar/archive/master.tar.gz | tar -zx \
  && mv -v mylar-master mylar \
- && mkdir -p /mnt/comics \
- && mkdir -p /mnt/downloads \
- && mkdir -p /mnt/torrents \
- && mkdir -p /mnt/data
+ && mkdir -p /etc/mylar \
+ && mkdir -p /mnt/mylar/comics \
+ && mkdir -p /mnt/mylar/downloads \
+ && mkdir -p /mnt/mylar/torrents
 
 # Add Mylar init script.
 COPY entrypoint.sh /home/mylar/entrypoint.sh
 RUN chmod 755 /home/mylar/entrypoint.sh
 
-VOLUME ["/mnt/comics", "/mnt/downloads", "/mnt/torrents", "/mnt/data"]
+VOLUME ["/etc/mylar", "/mnt/mylar/comics", "/mnt/mylar/downloads", "/mnt/mylar/torrents"]
 
 EXPOSE 8090
 

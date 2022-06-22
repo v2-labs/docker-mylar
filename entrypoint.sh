@@ -12,18 +12,17 @@ echo
 echo "  User:    ${USER}"
 echo "  UID:     ${MYLAR_UID:=666}"
 echo "  GID:     ${MYLAR_GID:=666}"
-echo "  CHMOD:   ${CHMOD_ACTIVE:=0}"
+echo "  CHMOD:   ${MYLAR_CHMOD:=false}"
 echo "  DEBUG:   ${DEBUG_LOG:=--quiet}"
 echo
-echo "  Config:  ${CONFIG:=/mnt/data/config.ini}"
-echo "  DataDir: ${DATADIR:=/mnt/data}"
+echo "  Config:  ${CONFIG:=/etc/mylar/config.ini}"
 echo
 
 #
 # Change UID / GID of Mylar user.
 #
 
-printf "Updating UID / GID... "
+printf "Updating UID / GID if needed... "
 [[ $(id -u ${USER}) == ${MYLAR_UID} ]] || usermod  -o -u ${MYLAR_UID} ${USER}
 [[ $(id -g ${USER}) == ${MYLAR_GID} ]] || groupmod -o -g ${MYLAR_GID} ${USER}
 echo "[DONE]"
@@ -34,12 +33,11 @@ echo "[DONE]"
 printf "Set permissions... "
 touch ${CONFIG}
 chown -R ${MYLAR_UID}:${MYLAR_GID} \
-      /home/mylar   /opt/mylar \
-      > /dev/null 2>&1
-[[ ${CHMOD_ACTIVE} -ne 0 ]] && \
+      /home/mylar /opt/mylar > /dev/null 2>&1
+[[ "${MYLAR_CHMOD}" == "false" ]] || \
       chown -R ${MYLAR_UID}:${MYLAR_GID} \
-      /mnt/comics   /mnt/downloads \
-      /mnt/torrents /mnt/data \
+      /mnt/mylar/comics   /mnt/mylar/downloads \
+      /mnt/mylar/torrents /etc/mylar \
       > /dev/null 2>&1
 echo "[DONE]"
 
@@ -59,4 +57,4 @@ echo "[${PORT}]"
 #
 
 echo "Starting Mylar..."
-exec su -p ${USER} -c "python -OO /opt/mylar/Mylar.py --nolaunch ${DEBUG} --datadir=${DATADIR} ${LISTENER} --config=${CONFIG}"
+exec su -p ${USER} -c "python -OO /opt/mylar/Mylar.py --nolaunch ${DEBUG_LOG} --datadir=$(dirname ${CONFIG}) ${LISTENER} --config=${CONFIG}"
